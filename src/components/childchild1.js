@@ -1,10 +1,10 @@
 import React, {useContext} from 'react'
-import InfoContext from '../context/Tesst'
+import User from '../context/UserContext'
 import * as Tone from "tone"
 
 
 const Childchild1 = (props) => {
-    const msg = useContext(InfoContext)
+    const msg = useContext(User)
 
 
     const sampler = new Tone.Sampler({

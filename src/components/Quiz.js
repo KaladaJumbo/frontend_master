@@ -1,42 +1,90 @@
-import React, { useState, useEffect } from 'react'
-
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import MobileStepper from '@material-ui/core/MobileStepper';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container';
-
 import Question from './Question'
+import { Container, TableSortLabel } from '@material-ui/core';
+
+// import AddressForm from './AddressForm';
+// import PaymentForm from './PaymentForm';
+// import Review from './Review';
+
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        marginRight: "auto",
-        marginLeft: "auto"
+    stepperSkin: {
+        backgroundColor: theme.palette.primary.main,
+        // paddingLeft: "20%"
     },
-    container: {
-        backgroundColor: "grey",
-        height: window.innerHeight,
-        overflow: "Hidden",
+    layout: {
+        width: 'auto',
+        marginLeft: theme.spacing(2),
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+            width: 600,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    paper: {
+        marginTop: "10%",
+        marginBottom: "auto",
+        padding: "5%"
+        
+    },
+    stepper: {
+        padding: theme.spacing(3, 0, 5),
+    },
+    buttons: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+    },
+    button: {
+        marginTop: theme.spacing(3),
+        marginLeft: theme.spacing(1),
     },
     card: {
-        padding: "auto",
-        margin: "auto",
-        marginTop: "auto",
-        marginBottom: "auto",
-        width: "50%",
-
-    }
+        margin: "1%",
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        // alignContent: 
+    },
+    CardContent: {
+        flexGrow: 1,
+    },
+    container: {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(4),
+    },
+    title:{
+      flexGrow: 1,
+      marginLeft: "auto",
+      marginRight: "auto",
+      color: theme.palette.secondary.main,
+      
+    },
 }));
 
-const Quiz = () => {
+export default function Checkout() {
     const classes = useStyles();
-
-    const [response, setResponse] = useState("")
+    const theme = useTheme();
+    const [activeStep, setActiveStep] = useState(0);
+    const [test, setTest] = useState([])
+    const [disabled, setDisabled] = useState(false)
     const [note, setNote] = useState("")
     const [answer, setAnswer] = useState("")
-    const [test, setTest] = useState([])
+    const [currentQuestion, setCurrentQuestion] = useState(null)
+    const [correct, setCorrect] = useState(0)
+    const [total, setTotal] = useState(0)
 
     const bURL = "http://localhost:3000/"
 
@@ -44,8 +92,10 @@ const Quiz = () => {
         if (test.length > 0){
             let newTest = test
             let question = newTest.pop()
+            question.multipleChoice = [question.answer, "a","b","c"]
+            setCurrentQuestion(question)
             setTest(newTest)
-            if (question.note[0] == "["){
+            if (question.note[0] === "["){
                 setNote(JSON.parse(question.note))
             }
             else{
@@ -53,29 +103,41 @@ const Quiz = () => {
             }
             setAnswer(question.answer)
         }
+        setDisabled(false)
+        console.log(test.length);
         
     }
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        let right = answer == response || response == "next"
+    const submitHandler = (response) => {
+        let right = answer === response || response === "next"
         alert(right === true ? "correct": "wrong");
-        setResponse("");
         if (right) {
-            //do something
+            setCorrect(correct+1)
         }
         else {
-            //do something else
         }
-        nextQuestion()
-
+        setTotal(total+1)
+        setDisabled(true)
     }
 
     const fetchRandom10 = async () => {
         const res  = await fetch(bURL + "questions/random10")
         const data = await res.json()
         await setTest(data)
+        await setActiveStep(0)
+        await setCorrect(0)
+        await setTotal(0)
+
     }
+
+    const handleNext = () => {
+        setActiveStep(activeStep + 1);
+        nextQuestion()
+    };
+
+    const handleBack = () => {
+        setActiveStep(activeStep - 1);
+    };
     
     useEffect(() => {
         console.log("fetch");
@@ -90,32 +152,76 @@ const Quiz = () => {
     }, [test])
 
     return (
-        <Container className={classes.container}>
-            <div className={classes.root}>
-            <br/>
-            <br/>
-            <br/>
-            <Typography variant="h1">Practice</Typography>
-            <br/>
-            <br/>
-            <br/>
-                <Card className={classes.card}>
-                        <CardContent>
-                            <h2>Quiz</h2>
-                            <h4>what is the note?</h4>
-                            <Question note={note} />
-                        </CardContent>
-                        <CardActions>
-                            <form onSubmit={(e) => { submitHandler(e) }}>
-                                <input type="text" value={response} onChange={(e) => { setResponse(e.target.value) }} />
-                            </form>
-                        </CardActions>
-                </Card>  
-            </div>
-        </Container>
-    )
+        <React.Fragment>
+            <CssBaseline />
+            <Container maxWidth="lg" className={classes.container} >
+                <Typography  
+                style={{fontFamily: 'Arizonia, cursive', "fontWeight": 600, marginRight: "1%", transform: "scale3d(1.15, 1.15, 1)"}} 
+                className={classes.title} variant="h2"
+                >
+                    Practice
+                </Typography>
+                <Typography  
+                style={{fontFamily: 'Times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                className={classes.title} variant="h6"
+                >
+                    Take a load off, chill, and casually train your ear. 
+                </Typography>
+                <main className={classes.layout}>
+                    <Paper className={classes.paper}>
+                        <div>
+
+                            {test.length >= 0 ? 
+                                <Card align="center" className={classes.card} style={{boxShadow: "none"}}>
+                                    <CardContent >
+                                    <Typography  
+                                    style={{fontFamily: 'Times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                                    className={classes.title} variant="h6"
+                                    >
+                                        What is being played?
+                                    </Typography>
+                                        <Question note={note} />
+                                    </CardContent>
+                                        <CardActions  >
+                                            <span style={{marginLeft: "auto"}}></span>
+                                            {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
+                                            <span style={{marginRight: "auto"}}></span>
+                                        </CardActions>
+                                </Card> : null}
+                            <MobileStepper
+                            variant="progress"
+                            steps={10}
+                            position="static"
+                            activeStep={activeStep}
+                            className={classes.stepperSkin}
+                            nextButton={
+                                <Button size="small" onClick={handleNext} disabled={activeStep === 9}>
+                                    Next
+                                    {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                                </Button>
+                                }
+                                backButton={
+                                    <Button>{10 - test.length}/10</Button>
+                                }
+                            />
+                        </div>
+                    </Paper>
+                    <Typography  
+                    style={{fontFamily: 'Arizonia, cursive', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                    className={classes.title} variant="h3"
+                    >
+                        Score: {correct}/{total}
+                    </Typography>
+                    <Button onClick={() => {fetchRandom10()}}>
+                    <Typography  
+                    style={{fontFamily: 'times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                    className={classes.title}
+                    >
+                        Restart?
+                    </Typography>
+                    </Button>
+                </main>
+            </Container>
+        </React.Fragment>
+    );
 }
-
-export default Quiz
-
-//test

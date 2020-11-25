@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react'
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import IconButton from "@material-ui/core/IconButton"
 import * as Tone from "tone"
 
 import Button from '@material-ui/core/Button'
@@ -30,11 +32,11 @@ const Question = (props) => {
 
     return (
         <div>
-            <Button style={{backgroundColor: "pink"}} onClick={() => {sound(props.note)}}>play</Button>
+        <IconButton color="primary" aria-label="upload picture" component="span" >
+          <PlayCircleOutlineIcon fontSize="large" style={{fontSize: "70px", fill: "pink"}} onClick={() => {sound(props.note)}}/>
+        </IconButton >
         </div>
     )
 }
 
 export default Question
-
-//test

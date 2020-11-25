@@ -8,27 +8,35 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button"
 import { useHistory } from "react-router-dom";
+import { useState } from 'react';
 
 
 const useStyles = makeStyles((theme) => ({
     root:{
-        backgroundColor: "#c2cad0",
+        backgroundColor: theme.palette.primary.main
     },
     title:{
         flexGrow: 1,
         marginLeft: "1%",
         marginRight: "5%",
-        color: "#546e7a",
+        color: theme.palette.secondary.main,
+        "&:hover": {
+            cursor: "pointer",
+            transform: "scale3d(1.05, 1.05, 0.50)"
+        },
     },
     toolbar: {
         alignItems: 'center'
     },
     button: {
-        color: "#546e7a", 
+        color: theme.palette.secondary.main, 
         fontFamily: 'Arizonia, cursive', 
         "fontWeight": 600, 
         textTransform: 'none', 
-        fontSize: "200%"
+        fontSize: "200%",
+        "&:hover": {
+            transform: "scale3d(1.15, 1.15, 0.60)"
+        },
     }
   
 }));
@@ -59,6 +67,7 @@ ElevationScroll.propTypes = {
 const NavBar = (props) => {
     const classes = useStyles();
     const history = useHistory();
+    const [user, setUser] = useState(null)
 
     const homeLink = () =>{ 
         let path = `/`; 
@@ -71,12 +80,18 @@ const NavBar = (props) => {
     }
 
     const testsLink = () =>{ 
-        let path = `/tests`; 
-        history.push(path);
+        if (user){
+            let path = `/tests`; 
+            history.push(path);
+        }
+        else{
+            let path = `/login`; 
+            history.push(path);
+        }
     }
 
     const fillerLink = () =>{ 
-        let path = `/filler`; 
+        let path = `/dashboard`; 
         history.push(path);
     }
 
@@ -86,13 +101,20 @@ const NavBar = (props) => {
     }
 
 
+
+
     return (
         <div>
             <CssBaseline />
             <ElevationScroll {...props}>
                 <AppBar className={classes.root} >
                     <Toolbar className={classes.toolbar}>
-                        <Typography style={{fontFamily: 'Arizonia, cursive', "fontWeight": 600}} className={classes.title} variant="h5">Master Output</Typography>
+                        <Typography 
+                         onClick={() => {homeLink()}} 
+                        style={{fontFamily: 'Arizonia, cursive', "fontWeight": 600, marginRight: "1%", }} 
+                        className={classes.title} variant="h5">
+                            Master Output
+                        </Typography>
                         <Button className={classes.button} onClick={() => {homeLink()}} style={{marginRight: "1%"}}>Home</Button>
                         <Button className={classes.button} onClick={() => {practiceLink()}} style={{marginRight: "1%"}}>Practice</Button>
                         <Button className={classes.button} onClick={() => {testsLink()}} style={{marginRight: "1%"}}>Tests</Button>
