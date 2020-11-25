@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button"
 import { useHistory } from "react-router-dom";
 import { useState } from 'react';
+import UserContext from '../context/UserContext';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -67,7 +68,7 @@ ElevationScroll.propTypes = {
 const NavBar = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    const [user, setUser] = useState(null)
+    const {user, setUser} = useContext(UserContext)
 
     const homeLink = () =>{ 
         let path = `/`; 
@@ -75,13 +76,14 @@ const NavBar = (props) => {
     }
 
     const practiceLink = () =>{ 
-        let path = `/practice`; 
+        let path = `/practice`;
         history.push(path);
     }
 
     const testsLink = () =>{ 
+        console.log(user);
         if (user){
-            let path = `/tests`; 
+            let path = `/tests`;
             history.push(path);
         }
         else{
@@ -90,18 +92,30 @@ const NavBar = (props) => {
         }
     }
 
-    const fillerLink = () =>{ 
-        let path = `/dashboard`; 
-        history.push(path);
+    const dashboardLink = () =>{ 
+        
+        if (user){
+            let path = `/dashboard`; 
+            history.push(path);
+        }
+        else{
+            let path = `/login`; 
+            history.push(path);
+        }
+
     }
 
     const loginLink = () =>{ 
+        console.log(user);
         let path = `/login`; 
         history.push(path);
     }
 
-
-
+    const logout = () =>{ 
+        console.log(user);
+        setUser(null)
+        
+    }
 
     return (
         <div>
@@ -118,8 +132,9 @@ const NavBar = (props) => {
                         <Button className={classes.button} onClick={() => {homeLink()}} style={{marginRight: "1%"}}>Home</Button>
                         <Button className={classes.button} onClick={() => {practiceLink()}} style={{marginRight: "1%"}}>Practice</Button>
                         <Button className={classes.button} onClick={() => {testsLink()}} style={{marginRight: "1%"}}>Tests</Button>
-                        <Button className={classes.button} onClick={() => {fillerLink()}} style={{marginRight: "5%"}}>Filler</Button>
-                        <Button className={classes.button} onClick={() => {loginLink()}} style={{marginRight: "1%"}}>Login</Button>
+                        <Button className={classes.button} onClick={() => {dashboardLink()}} style={{marginRight: "5%"}}>Dashboard</Button>
+                        {!user ? <Button className={classes.button} onClick={() => {loginLink()}} style={{marginRight: "1%"}}>Login</Button> 
+                        : <Button className={classes.button} onClick={() => {logout()}} style={{marginRight: "1%"}}>Logout</Button>}
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>

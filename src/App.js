@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const App = props => {
   const classes = useStyles();
-  const [user, setUser] = useState("test")
+  const [user, setUser] = useState(null)
 
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -10,6 +10,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import UserContext from '../context/UserContext';
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -46,8 +48,9 @@ const SignUp = () => {
     const [password, setPassword] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
-    const [currentUser, setCurrentUser] = useState(null)
     const [token, setToken] = useState(null)
+
+    const {user, setUser} = useContext(UserContext)
 
     const bURL = "http://localhost:3000/"
 
@@ -76,7 +79,7 @@ const SignUp = () => {
             await setTimeout( () => {
               console.log(data);
               localStorage.setItem("token", data.token)
-              setCurrentUser(data.user)
+              setUser(data.user)
               setToken(localStorage.getItem("token"))
             }, 0)
           }
