@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import UserContext from '../context/UserContext';
+import { useHistory } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = () => {
     const classes = useStyles();
+    const history = useHistory();
+
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [firstName, setFirstName] = useState("")
@@ -89,6 +92,13 @@ const SignUp = () => {
         })
 
     }
+
+    useEffect(() => {
+        if (user){
+          const path = `/dashboard`; 
+          history.push(path);
+        }
+    }, [user])
 
     return (
         <Container component="main" maxWidth="xs">
