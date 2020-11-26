@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     section:{
         height: currentWindow * .65,
         width: window.innerWidth,
-        backgroundColor:  "#c2cad0",
+        backgroundColor:  theme.palette.primary.main,
         margin: 0,
     },
     section2:{

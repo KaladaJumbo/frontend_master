@@ -3,8 +3,6 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IconButton from "@material-ui/core/IconButton"
 import * as Tone from "tone"
 
-import Button from '@material-ui/core/Button'
-
 const Question = (props) => {
     
     const sampler = new Tone.Sampler({
@@ -32,8 +30,8 @@ const Question = (props) => {
 
     return (
         <div>
-        <IconButton color="primary" aria-label="upload picture" component="span" >
-          <PlayCircleOutlineIcon fontSize="large" style={{fontSize: "70px", fill: "pink"}} onClick={() => {sound(props.note)}}/>
+        <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => {sound(props.note)}} >
+          <PlayCircleOutlineIcon fontSize="large" style={{fontSize: "70px", fill: "pink"}} />
         </IconButton >
         </div>
     )

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
@@ -12,10 +12,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Question from './Question'
 import { Container } from '@material-ui/core';
+import UserContext from '../context/UserContext';
 
-// import AddressForm from './AddressForm';
-// import PaymentForm from './PaymentForm';
-// import Review from './Review';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -77,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
 export default function Checkout() {
     const classes = useStyles();
     const theme = useTheme();
+
+    const {user} = useContext(UserContext)
+
     const [activeStep, setActiveStep] = useState(0);
     const [test, setTest] = useState([])
     const [disabled, setDisabled] = useState(false)
@@ -86,15 +88,40 @@ export default function Checkout() {
     const [correct, setCorrect] = useState(0)
     const [total, setTotal] = useState(0)
     const [finished, setFinished] = useState(false)
+    const [wrongAnswers, setWrongAnswers] = useState("")
+
 
     const bURL = "http://localhost:3000/"
+
+    const sendResults = () => {
+        console.log(user);
+        const meta = {
+            method: "POST",
+            headers: {
+              "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({wrongAnswers: wrongAnswers, user: user.id})
+        }
+        fetch( bURL + `tags`, meta )
+        .then(res => res.json())
+        .then(async (data) => {
+        if(data.auth){
+            await setTimeout( () => {
+                console.log(data);
+            }, 0)
+        }
+        else {
+        alert(data.info)
+        }
+    })
+    }
 
     const nextQuestion = () => {
         if (test.length > 0){
             setTotal(total+1)
             let newTest = test
             let question = newTest.pop()
-            question.multipleChoice = [question.answer, "a","b","c"]
+            question.multipleChoice = JSON.parse(question.multipleChoice)
             setCurrentQuestion(question)
             setTest(newTest)
             if (question.note[0] === "["){
@@ -117,10 +144,11 @@ export default function Checkout() {
             setCorrect(correct+1)
         }
         else {
-            //do something else
+            setWrongAnswers(prevState => ([...prevState, currentQuestion.id]))
         }
         if (test.length === 0){
             setFinished(true)
+            sendResults()
         }
         setDisabled(true)
         
@@ -134,6 +162,7 @@ export default function Checkout() {
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
+        console.log(wrongAnswers);
         nextQuestion()
     };
     
@@ -181,7 +210,7 @@ export default function Checkout() {
                                     </Typography>
                                         <Question note={note} />
                                     </CardContent>
-                                        <CardActions  >
+                                        <CardActions >
                                             <span style={{marginLeft: "auto"}}></span>
                                             {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
                                             <span style={{marginRight: "auto"}}></span>

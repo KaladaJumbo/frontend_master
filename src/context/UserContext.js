@@ -1,4 +1,4 @@
-//InfoContext.js
+//User data
 import React from "react"
 
 const UserContext = React.createContext(null)

@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.secondary.main,
         "&:hover": {
             cursor: "pointer",
-            transform: "scale3d(1.05, 1.05, 0.50)"
         },
     },
     toolbar: {
@@ -36,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'none', 
         fontSize: "200%",
         "&:hover": {
-            transform: "scale3d(1.15, 1.15, 0.60)"
+            transform: "scale3d(1.15, 1.15, 0.60)",
+            color: theme.palette.secondary.roseGold
         },
     }
   
@@ -124,9 +124,9 @@ const NavBar = (props) => {
                 <AppBar className={classes.root} >
                     <Toolbar className={classes.toolbar}>
                         <Typography 
-                         onClick={() => {homeLink()}} 
+                        onClick={() => {homeLink()}} 
                         style={{fontFamily: 'Arizonia, cursive', "fontWeight": 600, marginRight: "1%", }} 
-                        className={classes.title} variant="h5">
+                        className={classes.title} variant="h4">
                             Master Output
                         </Typography>
                         <Button className={classes.button} onClick={() => {homeLink()}} style={{marginRight: "1%"}}>Home</Button>

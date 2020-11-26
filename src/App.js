@@ -1,6 +1,6 @@
 import react, { useState } from 'react'
 import Quiz from "./components/Quiz"
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 
 import Container from "@material-ui/core/Container";
 import { makeStyles } from '@material-ui/core/styles';
@@ -42,10 +42,10 @@ const App = props => {
               <Quiz />
             </Route>
             <Route exact path="/Tests">
-              <Test />
+              {user ? <Test /> : <Redirect to="/login"/> }
             </Route>
             <Route exact path="/dashboard">
-              <Main />
+            {user ? <Main /> : <Redirect to="/login"/> }
             </Route>
             <Route exact path="/login">
               <Login />

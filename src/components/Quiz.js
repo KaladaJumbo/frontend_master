@@ -85,6 +85,7 @@ export default function Checkout() {
     const [currentQuestion, setCurrentQuestion] = useState(null)
     const [correct, setCorrect] = useState(0)
     const [total, setTotal] = useState(0)
+    const [wrongAnswers, setWrongAnswers] = useState("")
 
     const bURL = "http://localhost:3000/"
 
@@ -92,7 +93,7 @@ export default function Checkout() {
         if (test.length > 0){
             let newTest = test
             let question = newTest.pop()
-            question.multipleChoice = [question.answer, "a","b","c"]
+            question.multipleChoice = JSON.parse(question.multipleChoice)
             setCurrentQuestion(question)
             setTest(newTest)
             if (question.note[0] === "["){
@@ -110,11 +111,12 @@ export default function Checkout() {
 
     const submitHandler = (response) => {
         let right = answer === response || response === "next"
-        alert(right === true ? "correct": "wrong");
+        alert(right === true ? `correct, ${answer}`: `wrong, ${answer}`);
         if (right) {
             setCorrect(correct+1)
         }
         else {
+            setWrongAnswers(prevState => ([...prevState, currentQuestion.id]))
         }
         setTotal(total+1)
         setDisabled(true)
@@ -127,11 +129,13 @@ export default function Checkout() {
         await setActiveStep(0)
         await setCorrect(0)
         await setTotal(0)
+        console.log(data)
 
     }
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
+        console.log(wrongAnswers);
         nextQuestion()
     };
 

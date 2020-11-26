@@ -39,7 +39,7 @@ const Chart = () => {
         createData('30', "sep"),
         createData('45', "oct"),
         createData('46', "nov"),
-        createData('100', "dec"),
+        createData('0', "dec"),
     ];
 
     return (
