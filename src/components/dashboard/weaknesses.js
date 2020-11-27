@@ -1,13 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
 import { Grid } from '@material-ui/core';
-
-function preventDefault(event) {
-  event.preventDefault();
-}
+import UserContext from '../../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({
   depositContext: {
@@ -26,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Weaknesses = () => {
   const classes = useStyles();
+  const {user} = useContext(UserContext)
+
   const [tags, setTags] = useState(["chords", "minor keys", "scales","chords", "minor keys", "scales", "scales", "scales"])
   return (
     <React.Fragment>
@@ -42,12 +41,12 @@ const Weaknesses = () => {
       >
         tags
       </Typography>
-      <Grid container xs={12}>
-      {tags.map(tag => <Grid item xs={6}><Typography>{tag}</Typography></Grid>)}
+      <Grid container direction="column" xs={12}>
+      {user.tags.length > 0 ? user.tags.map(tag => <Grid item xs={6}><Typography>{tag.name}</Typography></Grid>): <Typography>Go to the Test tab to take a test and impove!</Typography> }
       </Grid>
       <div className={classes.footerLink}>
         <Link color="primary" href="/tests">
-          take a test on these weaknesses?
+          take a personalized test?
         </Link>
       </div>
       </div>

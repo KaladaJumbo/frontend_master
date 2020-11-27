@@ -139,7 +139,6 @@ export default function Checkout() {
 
     const submitHandler = (response) => {
         let right = answer === response || response === "next"
-        alert(right === true ? "correct": "wrong");
         if (right) {
             setCorrect(correct+1)
         }

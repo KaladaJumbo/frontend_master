@@ -82,7 +82,7 @@ const SignUp = () => {
             await setTimeout( () => {
               console.log(data);
               localStorage.setItem("token", data.token)
-              setUser(data.user)
+              setUser({...data.user, tags: data.tags})
               setToken(localStorage.getItem("token"))
             }, 0)
           }

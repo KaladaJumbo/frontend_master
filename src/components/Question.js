@@ -31,7 +31,7 @@ const Question = (props) => {
     return (
         <div>
         <IconButton color="primary" aria-label="upload picture" component="span" onClick={() => {sound(props.note)}} >
-          <PlayCircleOutlineIcon fontSize="large" style={{fontSize: "70px", fill: "pink"}} />
+          <PlayCircleOutlineIcon fontSize="large" style={{fontSize: "70px", fill: "#E3AEB1"}} />
         </IconButton >
         </div>
     )

@@ -11,11 +11,14 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Question from './Question'
-import { Container, TableSortLabel } from '@material-ui/core';
+import { Container } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
-// import AddressForm from './AddressForm';
-// import PaymentForm from './PaymentForm';
-// import Review from './Review';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,10 +49,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'flex-end',
     },
-    button: {
-        marginTop: theme.spacing(3),
-        marginLeft: theme.spacing(1),
-    },
     card: {
         margin: "1%",
         height: '100%',
@@ -72,7 +71,27 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.secondary.main,
       
     },
+    button: {
+        color: theme.palette.secondary.main, 
+        fontFamily: 'Arizonia, cursive', 
+        "fontWeight": 600, 
+        textTransform: 'none', 
+        fontSize: "200%",
+        "&:hover": {
+            transform: "scale3d(1.15, 1.15, 0.60)",
+            color: theme.palette.secondary.roseGold
+        },
+        marginTop: theme.spacing(3),
+        marginLeft: theme.spacing(1),
+    },
+    dialog: {
+
+    }
 }));
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function Checkout() {
     const classes = useStyles();
@@ -86,6 +105,8 @@ export default function Checkout() {
     const [correct, setCorrect] = useState(0)
     const [total, setTotal] = useState(0)
     const [wrongAnswers, setWrongAnswers] = useState("")
+    const [open, setOpen] = useState(false)
+    const [message, setMessage] = useState({})
 
     const bURL = "http://localhost:3000/"
 
@@ -111,7 +132,8 @@ export default function Checkout() {
 
     const submitHandler = (response) => {
         let right = answer === response || response === "next"
-        alert(right === true ? `correct, ${answer}`: `wrong, ${answer}`);
+        setMessage({title: right === true ? `CORRECT`: `WRONG`, text: `The sound was a(n) ${answer}`});
+        setOpen(true)
         if (right) {
             setCorrect(correct+1)
         }
@@ -138,10 +160,6 @@ export default function Checkout() {
         console.log(wrongAnswers);
         nextQuestion()
     };
-
-    const handleBack = () => {
-        setActiveStep(activeStep - 1);
-    };
     
     useEffect(() => {
         console.log("fetch");
@@ -159,6 +177,42 @@ export default function Checkout() {
         <React.Fragment>
             <CssBaseline />
             <Container maxWidth="lg" className={classes.container} >
+                <div>
+                    <Dialog
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    TransitionComponent={Transition}
+                    keepMounted
+                    fullWidth={true}
+                    maxWidth = {'sm'}
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            <Typography  
+                            style={{fontFamily: 'times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                            className={classes.title}
+                            variant="h3"
+                            >
+                                {message.title}
+                            </Typography>
+                        </DialogTitle>
+                        <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            <Typography  
+                            style={{fontFamily: 'times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                            className={classes.title}
+                            variant="h5"
+                            >
+                                {message.text}
+                            </Typography>
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Question note={note} />
+                        </DialogActions>
+                    </Dialog>
+                </div>
                 <Typography  
                 style={{fontFamily: 'Arizonia, cursive', "fontWeight": 600, marginRight: "1%", transform: "scale3d(1.15, 1.15, 1)"}} 
                 className={classes.title} variant="h2"

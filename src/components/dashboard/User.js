@@ -1,5 +1,4 @@
-import React from 'react';
-import Link from '@material-ui/core/Link';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,34 +6,28 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-
-
-// Generate Order Data
-function createData(id, tag, tip) {
-  return { id, tag, tip };
-}
-
-
-function preventDefault(event) {
-  event.preventDefault();
-}
+import UserContext from '../../context/UserContext';
+import { Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   seeMore: {
     marginTop: theme.spacing(3),
   },
+  title: {
+    textTransform: "Capitalize",
+    color: theme.palette.secondary.main
+  },
+  container: {
+    width: "100%",
+    height: "25vh",
+    overflowY: "scrollable"
+  }
 }));
 
 export default function Orders() {
   const classes = useStyles();
 
-  const rows = [
-    createData(0, 'chords', 'Good job keep it up'),
-    createData(1, 'scales', 'Good job keep it up'),
-    createData(2, 'guac', 'Good job keep it up'),
-    createData(3, 'money', 'Good job keep it up'),
-    createData(4, 'stuff', 'Good job keep it up'),
-  ];
+  const {user} = useContext(UserContext) 
 
   return (
     <React.Fragment>
@@ -42,25 +35,26 @@ export default function Orders() {
         style={{ fontFamily: 'Arizonia, cursive', "fontWeight": 600, marginRight: "1%" }}
         className={classes.title} variant="h3"
       >
-        Kalada - 500 points
+        {user.username} - 500 points
       </Typography>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Tag</TableCell>
-            <TableCell>Tips and Tricks</TableCell>
-            {/* <TableCell align="right">Sale Amount</TableCell> */}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell style={{ width: '10%' }}>{row.tag}</TableCell>
-              <TableCell>{row.tip}</TableCell>
+      <Container className={classes.container}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Tag</TableCell>
+              <TableCell>Tips and Tricks</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {user.tags.map((tag) => (
+              <TableRow key={tag.id}>
+                <TableCell style={{ width: '10%' }}>{tag.name}</TableCell>
+                <TableCell>{tag.name}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Container>
     </React.Fragment>
   );
 }

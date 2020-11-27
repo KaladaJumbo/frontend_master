@@ -1,4 +1,4 @@
-import react, { useState } from 'react'
+import react, { useEffect, useState } from 'react'
 import Quiz from "./components/Quiz"
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 
@@ -26,6 +26,39 @@ const useStyles = makeStyles((theme) => ({
 const App = props => {
   const classes = useStyles();
   const [user, setUser] = useState(null)
+
+  const bURL = "http://localhost:3000/"
+
+  const fetchUser = () => {
+
+    const meta = {
+      headers: {
+        "Authentication": `Bearer ${localStorage.getItem("token")}`
+      }
+    }
+
+    fetch( bURL + `login/user`, meta )
+      .then(res => res.json())
+      .then(async (data) => {
+      if(data.auth){
+        await setTimeout( () => {
+          console.log("login");
+          console.log(data);
+          setUser({...data.user, tags: data.tags})
+        }, 0)
+      }
+      else {
+        alert(data.info)
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem("token")){
+      fetchUser()
+    }
+      
+  }, [])
 
 
   return (
