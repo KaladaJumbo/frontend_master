@@ -13,9 +13,12 @@ import CardContent from '@material-ui/core/CardContent';
 import Question from './Question'
 import { Container } from '@material-ui/core';
 import UserContext from '../context/UserContext';
-
-
-
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles((theme) => ({
     stepperSkin: {
@@ -73,7 +76,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Checkout() {
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="left" ref={ref} {...props} />;
+});
+
+const Tests = (props) => {
     const classes = useStyles();
     const theme = useTheme();
 
@@ -89,6 +96,8 @@ export default function Checkout() {
     const [total, setTotal] = useState(0)
     const [finished, setFinished] = useState(false)
     const [wrongAnswers, setWrongAnswers] = useState("")
+    const [open, setOpen] = useState(false)
+    const [message, setMessage] = useState({})
 
 
     const bURL = "http://localhost:3000/"
@@ -139,6 +148,7 @@ export default function Checkout() {
 
     const submitHandler = (response) => {
         let right = answer === response || response === "next"
+        setMessage({title: "Score", text: `${correct}/${total}`});
         if (right) {
             setCorrect(correct+1)
         }
@@ -146,7 +156,7 @@ export default function Checkout() {
             setWrongAnswers(prevState => ([...prevState, currentQuestion.id]))
         }
         if (test.length === 0){
-            setFinished(true)
+            setOpen(true)
             sendResults()
         }
         setDisabled(true)
@@ -180,6 +190,42 @@ export default function Checkout() {
     return (
         <React.Fragment>
             <CssBaseline />
+            <div>
+                <Dialog
+                open={open}
+                onClose={() => setOpen(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                TransitionComponent={Transition}
+                keepMounted
+                fullWidth={true}
+                maxWidth = {'sm'}
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        <Typography  
+                        style={{fontFamily: 'times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                        className={classes.title}
+                        variant="h3"
+                        >
+                            {message.title}
+                        </Typography>
+                    </DialogTitle>
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <Typography  
+                        style={{fontFamily: 'times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                        className={classes.title}
+                        variant="h5"
+                        >
+                            {message.text}
+                        </Typography>
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        {/* <Question note={note} /> */}
+                    </DialogActions>
+                </Dialog>
+            </div>
             <Container maxWidth="lg" className={classes.container} >
                 <Typography  
                 style={{fontFamily: 'Arizonia, cursive', "fontWeight": 600, marginRight: "1%", transform: "scale3d(1.15, 1.15, 1)"}} 
@@ -215,12 +261,7 @@ export default function Checkout() {
                                             <span style={{marginRight: "auto"}}></span>
                                         </CardActions>
                                 </Card> : 
-                                <Typography  
-                                style={{fontFamily: 'Arizonia, cursive', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
-                                className={classes.title} variant="h3"
-                                >
-                                    Score: {correct}/{total}
-                                </Typography>
+                                null
                             : null}
                             <MobileStepper
                             variant="progress"
@@ -245,3 +286,5 @@ export default function Checkout() {
         </React.Fragment>
     );
 }
+
+export default Tests
