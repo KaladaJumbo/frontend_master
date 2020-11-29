@@ -41,7 +41,7 @@ const Weaknesses = () => {
       >
         tags
       </Typography>
-      <Grid container direction="column" xs={12}>
+      <Grid container xs={12}>
       {user.tags.length > 0 ? user.tags.map(tag => <Grid item xs={6}><Typography>{tag.name}</Typography></Grid>): <Typography>Go to the Test tab to take a test and impove!</Typography> }
       </Grid>
       <div className={classes.footerLink}>

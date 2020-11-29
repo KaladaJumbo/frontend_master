@@ -74,6 +74,10 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.secondary.main,
       
     },
+    qButton: {
+        color: theme.palette.secondary.main, 
+        textTransform: 'capitalize', 
+    },
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -84,7 +88,7 @@ const Tests = (props) => {
     const classes = useStyles();
     const theme = useTheme();
 
-    const {user} = useContext(UserContext)
+    const {user, setUser} = useContext(UserContext)
 
     const [activeStep, setActiveStep] = useState(0);
     const [test, setTest] = useState([])
@@ -115,7 +119,7 @@ const Tests = (props) => {
         .then(res => res.json())
         .then(async (data) => {
         if(data.auth){
-            await setTimeout( () => {
+            await setTimeout( async () => {
                 console.log(data);
             }, 0)
         }
@@ -257,7 +261,7 @@ const Tests = (props) => {
                                     </CardContent>
                                         <CardActions >
                                             <span style={{marginLeft: "auto"}}></span>
-                                            {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
+                                            {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button className={classes.qButton} disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
                                             <span style={{marginRight: "auto"}}></span>
                                         </CardActions>
                                 </Card> : 

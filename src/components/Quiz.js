@@ -18,6 +18,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import IntervalQuestion from "./intervalQuestion"
+import QuizDrawer from "./drawer"
 
 
 
@@ -39,7 +41,8 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: "10%",
         marginBottom: "auto",
-        padding: "5%"
+        padding: "5%",
+        paddingTop: "1%"
         
     },
     stepper: {
@@ -84,6 +87,10 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(3),
         marginLeft: theme.spacing(1),
     },
+    qButton: {
+        color: theme.palette.secondary.main, 
+        textTransform: 'capitalize', 
+    },
     dialog: {
 
     }
@@ -107,6 +114,8 @@ export default function Checkout() {
     const [wrongAnswers, setWrongAnswers] = useState("")
     const [open, setOpen] = useState(false)
     const [message, setMessage] = useState({})
+    const [type, setType] = useState("random10")
+    const [singleSound, setSingleSound] = useState({filter: "random10", ss: true})
 
     const bURL = "http://localhost:3000/"
 
@@ -144,13 +153,24 @@ export default function Checkout() {
         setDisabled(true)
     }
 
-    const fetchRandom10 = async () => {
-        const res  = await fetch(bURL + "questions/random10")
+    const drawerParams = (filter, ss) => {
+        if (singleSound){
+            setSingleSound({filter: filter, ss: ss})
+        }
+        else{
+            setSingleSound({filter: filter, ss: ss})
+            
+        }
+    }
+
+    const fetchRandom10 = async (uri) => {
+        const res  = await fetch(bURL + "questions/custom/" + uri)
         const data = await res.json()
         await setTest(data)
         await setActiveStep(0)
         await setCorrect(0)
         await setTotal(0)
+        console.log(bURL + "questions/custom/" + uri)
         console.log(data)
 
     }
@@ -163,7 +183,7 @@ export default function Checkout() {
     
     useEffect(() => {
         console.log("fetch");
-        fetchRandom10()
+        fetchRandom10(type)
         
     }, [])
 
@@ -173,11 +193,17 @@ export default function Checkout() {
         
     }, [test])
 
+    useEffect(() => {
+        setType(singleSound.filter)
+        fetchRandom10(singleSound.filter)
+    }, [singleSound])
+
     return (
         <React.Fragment>
             <CssBaseline />
             <Container maxWidth="lg" className={classes.container} >
                 <div>
+                    {/* alert box */}
                     <Dialog
                     open={open}
                     onClose={() => setOpen(false)}
@@ -209,10 +235,11 @@ export default function Checkout() {
                         </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Question note={note} />
+                            {singleSound.ss ? <Question note={note} /> : <IntervalQuestion note={note}/>}
                         </DialogActions>
                     </Dialog>
                 </div>
+
                 <Typography  
                 style={{fontFamily: 'Arizonia, cursive', "fontWeight": 600, marginRight: "1%", transform: "scale3d(1.15, 1.15, 1)"}} 
                 className={classes.title} variant="h2"
@@ -231,18 +258,20 @@ export default function Checkout() {
 
                             {test.length >= 0 ? 
                                 <Card align="center" className={classes.card} style={{boxShadow: "none"}}>
+                                    <QuizDrawer drawerParams={drawerParams} />
                                     <CardContent >
-                                    <Typography  
-                                    style={{fontFamily: 'Times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
-                                    className={classes.title} variant="h6"
-                                    >
-                                        What is being played?
-                                    </Typography>
-                                        <Question note={note} />
+                                        <Typography  
+                                        style={{fontFamily: 'Times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                                        className={classes.title} variant="h6"
+                                        >
+                                            What is being played?
+                                        </Typography>
+                                        {singleSound.ss ? <Question note={note} /> : <IntervalQuestion note={note}/>}
+                                        {/* <IntervalQuestion note={note}/> */}
                                     </CardContent>
                                         <CardActions  >
                                             <span style={{marginLeft: "auto"}}></span>
-                                            {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
+                                            {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button className={classes.qButton} disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
                                             <span style={{marginRight: "auto"}}></span>
                                         </CardActions>
                                 </Card> : null}
@@ -270,7 +299,7 @@ export default function Checkout() {
                     >
                         Score: {correct}/{total}
                     </Typography>
-                    <Button onClick={() => {fetchRandom10()}}>
+                    <Button onClick={() => {fetchRandom10(type)}}>
                     <Typography  
                     style={{fontFamily: 'times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
                     className={classes.title}
