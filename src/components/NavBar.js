@@ -114,6 +114,7 @@ const NavBar = (props) => {
     const logout = () =>{ 
         setUser(null)
         localStorage.clear()
+        window.location.reload()
         
     }
 

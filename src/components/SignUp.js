@@ -84,6 +84,8 @@ const SignUp = () => {
               localStorage.setItem("token", data.token)
               setUser({...data.user, tags: data.tags})
               setToken(localStorage.getItem("token"))
+              const path = `/dashboard`; 
+              history.push(path);
             }, 0)
           }
           else {
@@ -98,7 +100,7 @@ const SignUp = () => {
           const path = `/dashboard`; 
           history.push(path);
         }
-    }, [user])
+    }, [localStorage.getItem("token")])
 
     return (
         <Container component="main" maxWidth="xs">

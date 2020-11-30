@@ -19,6 +19,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import IntervalQuestion from './intervalQuestion';
 
 const useStyles = makeStyles((theme) => ({
     stepperSkin: {
@@ -168,9 +169,27 @@ const Tests = (props) => {
     }
 
     const fetchRandom10 = async () => {
-        const res  = await fetch(bURL + "questions/random10")
-        const data = await res.json()
-        await setTest(data)
+        if (user.tags.length > 0 ){
+            console.log(user.tags);
+            const meta = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    tags: user.tags
+                })
+            }
+            const res  = await fetch(bURL + "questions/randomwithtags", meta)
+            const data = await res.json()
+            await setTest(data)
+        }
+        else{
+            const res  = await fetch(bURL + "questions/random10")
+            const data = await res.json()
+            await setTest(data)
+        }
+        
     }
 
     const handleNext = () => {
@@ -197,7 +216,10 @@ const Tests = (props) => {
             <div>
                 <Dialog
                 open={open}
-                onClose={() => setOpen(false)}
+                onClose={() => {
+                    setOpen(false)
+                    window.location.reload()
+                }}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
                 TransitionComponent={Transition}
@@ -257,7 +279,7 @@ const Tests = (props) => {
                                     >
                                         What is being played?
                                     </Typography>
-                                        <Question note={note} />
+                                    {currentQuestion ? currentQuestion.qtype !== "i" ? <Question note={note} /> : <IntervalQuestion note={note}/> : null}
                                     </CardContent>
                                         <CardActions >
                                             <span style={{marginLeft: "auto"}}></span>

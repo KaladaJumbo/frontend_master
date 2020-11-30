@@ -12,6 +12,7 @@ import NavBar from "./components/NavBar"
 import UserContext from "./context/UserContext"
 import SignUp from "./components/SignUp";
 import Main from "./components/dashboard/Main";
+import NoMatchPage from "./components/noMatchPage"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const App = props => {
   const classes = useStyles();
   const [user, setUser] = useState(null)
+  const [loggedIn, setLoggedIn] = useState(null)
 
   const bURL = "http://localhost:3000/"
 
@@ -57,9 +59,14 @@ const App = props => {
     if (localStorage.getItem("token")){
       fetchUser()
     }
-      
   }, [])
 
+  useEffect(() => {
+    if (!!user){
+      setLoggedIn(true)
+      console.log("loggedIn")
+    }
+  }, [user])
 
   return (
     <div className="App">
@@ -75,10 +82,10 @@ const App = props => {
               <Quiz />
             </Route>
             <Route exact path="/Tests">
-              {user ? <Test /> : <Redirect to="/login"/> }
+              {loggedIn ? <Test /> : <Redirect to="/login"/> }
             </Route>
             <Route exact path="/dashboard">
-            {user ? <Main /> : <Redirect to="/login"/> }
+            {loggedIn ? <Main /> : <Redirect to="/login"/> }
             </Route>
             <Route exact path="/login">
               <Login />
@@ -86,6 +93,7 @@ const App = props => {
             <Route exact path="/signup">
               <SignUp />
             </Route>
+            <Route component={NoMatchPage} />
           </Switch>
         </Container>
       </UserContext.Provider>

@@ -235,7 +235,7 @@ export default function Checkout() {
                         </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            {singleSound.ss ? <Question note={note} /> : <IntervalQuestion note={note}/>}
+                            {currentQuestion ? currentQuestion.qtype !== "i" ? <Question note={note} /> : <IntervalQuestion note={note}/> : null}
                         </DialogActions>
                     </Dialog>
                 </div>
@@ -266,7 +266,7 @@ export default function Checkout() {
                                         >
                                             What is being played?
                                         </Typography>
-                                        {singleSound.ss ? <Question note={note} /> : <IntervalQuestion note={note}/>}
+                                        {currentQuestion ? currentQuestion.qtype !== "i" ? <Question note={note} /> : <IntervalQuestion note={note}/> : null}
                                         {/* <IntervalQuestion note={note}/> */}
                                     </CardContent>
                                         <CardActions  >
