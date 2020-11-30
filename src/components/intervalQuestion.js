@@ -20,10 +20,12 @@ const IntervalQuestion = (props) => {
     const sound = (notes = ["C4", "d4", ["c4", "e4", "g4"]]) => {
         const now = Tone.now()
         let interval = 0
+        console.log(notes)
         notes.forEach(note => {
+            console.log(note)
            Tone.loaded().then(() => {
-                sampler.triggerAttackRelease(note, 2, now + interval);
-                interval += 0.7
+                sampler.triggerAttackRelease(note, 0.8, now + interval);
+                interval += 0.8
             }) 
         })
         

@@ -108,7 +108,10 @@ const QuizDrawer = (props) => {
                 <ListItem button onClick={() => props.drawerParams("scales", false)}>
                     <ListItemText classes={{primary: classes.listItemText}} primary={"Scales"} />
                 </ListItem>
-                {['All mail', 'Trash'].map((text, index) => (
+                <ListItem button onClick={() => props.drawerParams("progressions", false)}>
+                    <ListItemText classes={{primary: classes.listItemText}} primary={"Progressions"} />
+                </ListItem>
+                {['All mail'].map((text, index) => (
                 <ListItem button >
                     <ListItemText classes={{primary: classes.listItemText}} primary={text} />
                 </ListItem>
