@@ -109,12 +109,13 @@ const Tests = (props) => {
 
     const sendResults = () => {
         console.log(user);
+        const p = user.points + correct
         const meta = {
             method: "POST",
             headers: {
               "Content-Type" : "application/json"
             },
-            body: JSON.stringify({wrongAnswers: wrongAnswers, user: user.id})
+            body: JSON.stringify({wrongAnswers: wrongAnswers, user: user.id, points: p})
         }
         fetch( bURL + `tags`, meta )
         .then(res => res.json())

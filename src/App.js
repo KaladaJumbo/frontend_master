@@ -13,6 +13,8 @@ import UserContext from "./context/UserContext"
 import SignUp from "./components/SignUp";
 import Main from "./components/dashboard/Main";
 import NoMatchPage from "./components/noMatchPage"
+import PApp from './playgroundComponents/pianoRoll/Papp';
+import Playground from './components/playground';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -92,6 +94,12 @@ const App = props => {
             </Route>
             <Route exact path="/signup">
               <SignUp />
+            </Route>
+            <Route exact path="/playground">
+              <Playground />
+            </Route>
+            <Route exact path="/pianoroll">
+              <PApp />
             </Route>
             <Route component={NoMatchPage} />
           </Switch>

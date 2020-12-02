@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "25vh",
     overflowY: "scrollable"
+  },
+  tableTitles: {
+    textTransform: "Capitalize",
+    color: theme.palette.secondary.roseGold
   }
 }));
 
@@ -35,7 +39,7 @@ export default function Orders() {
         style={{ fontFamily: 'Arizonia, cursive', "fontWeight": 600, marginRight: "1%" }}
         className={classes.title} variant="h3"
       >
-        {user.username} - 500 points
+        {user.username} - {user.points}
       </Typography>
       <Container className={classes.container}>
         <Table size="small">
@@ -48,8 +52,8 @@ export default function Orders() {
           <TableBody>
             {user.tags.map((tag) => (
               <TableRow key={tag.id}>
-                <TableCell style={{ width: '10%' }}>{tag.name}</TableCell>
-                <TableCell>{tag.name}</TableCell>
+                <TableCell style={{ width: '10%' }}><span className={classes.tableTitles}>{tag.name}</span></TableCell>
+                <TableCell><span>{tag.tip}</span></TableCell>
               </TableRow>
             ))}
           </TableBody>

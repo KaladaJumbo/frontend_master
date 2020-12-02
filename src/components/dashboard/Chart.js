@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
+import UserContext from '../../context/UserContext';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 // import Title from './Title';
 
@@ -26,6 +27,7 @@ function createData(months, points) {
 const Chart = () => {
     const classes = useStyles()
     const theme = useTheme();
+    const {user} = useContext(UserContext) 
 
     const data = [
         createData('10', "jan"),
@@ -39,7 +41,7 @@ const Chart = () => {
         createData('30', "sep"),
         createData('45', "oct"),
         createData('46', "nov"),
-        createData('0', "dec"),
+        createData(user.points, "dec"),
     ];
 
     return (

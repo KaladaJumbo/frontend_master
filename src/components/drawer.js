@@ -11,6 +11,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Typography from "@material-ui/core/Typography"
+import { IconButton } from '@material-ui/core';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -27,14 +29,12 @@ const useStyles = makeStyles(theme => ({
   button: {
     float: "right", 
     marginRight: "2%",
-    color: theme.palette.secondary.roseGold,
+    color: theme.palette.secondary.main,
     fontFamily: 'Arizonia, cursive', 
     "fontWeight": 600, 
-    textTransform: 'none', 
-    fontSize: "200%",
+    transform: "scale(2)",    // fontSize: "200%",
     "&:hover": {
-        transform: "scale3d(1.15, 1.15, 0.60)",
-        color: theme.palette.secondary.main, 
+        color: theme.palette.secondary.roseGold, 
     },
     marginTop: "1%",
     marginLeft: theme.spacing(1),
@@ -111,6 +111,11 @@ const QuizDrawer = (props) => {
                 <ListItem button onClick={() => props.drawerParams("progressions", false)}>
                     <ListItemText classes={{primary: classes.listItemText}} primary={"Progressions"} />
                 </ListItem>
+                <span style={{marginLeft: "3%"}}>Extras</span>
+                <Divider />
+                <ListItem button >
+                    <a href="/playground"><ListItemText classes={{primary: classes.listItemText}} primary={"Playground"} /></a>
+                </ListItem>
                 {/* <ListItem button onClick={() => props.drawerParams("major vs minor", true)}>
                     <ListItemText classes={{primary: classes.listItemText}} primary={"major vs minor"} />
                 </ListItem> */}
@@ -122,7 +127,9 @@ const QuizDrawer = (props) => {
   return (
     <div>
         <React.Fragment key={"left"}>
-          <Button onClick={toggleDrawer("left", true)} variant="text" className={classes.button}>{"Options"}</Button>
+          <IconButton onClick={toggleDrawer("left", true)} className={classes.button}>
+            <SettingsIcon fontSize="30%"/>
+          </IconButton>
           <Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
             {list("left")}
           </Drawer>

@@ -80,6 +80,11 @@ const NavBar = (props) => {
         history.push(path);
     }
 
+    const playground = () =>{ 
+        let path = `/playground`;
+        history.push(path);
+    }
+
     const testsLink = () =>{ 
         console.log(user);
         if (user){
@@ -134,6 +139,7 @@ const NavBar = (props) => {
                         <Button className={classes.button} onClick={() => {practiceLink()}} style={{marginRight: "1%"}}>Practice</Button>
                         <Button className={classes.button} onClick={() => {testsLink()}} style={{marginRight: "1%"}}>Tests</Button>
                         <Button className={classes.button} onClick={() => {dashboardLink()}} style={{marginRight: "5%"}}>Dashboard</Button>
+                        {/* <Button className={classes.button} onClick={() => {playground()}} style={{marginRight: "5%"}}>Playground</Button> */}
                         {!user ? <Button className={classes.button} onClick={() => {loginLink()}} style={{marginRight: "1%"}}>Login</Button> 
                         : <Button className={classes.button} onClick={() => {logout()}} style={{marginRight: "1%"}}>Logout</Button>}
                     </Toolbar>
