@@ -74,7 +74,7 @@ const Home = () => {
                     Learn music as intended, by ear not hand.  
                 </Typography>
                 <Typography className={classes.info} variant="h4" style={{fontFamily: "ArialBoldItalicMT", color: "#546e7a"}}>
-                    Take back control of the master output. Train your ear
+                    Take back control of the master output. Train your ear.
                 </Typography>
             </div>
             <div className={classes.section}>
