@@ -46,13 +46,14 @@ const useStyles = makeStyles(theme => ({
     marginTop: "5%", 
     marginBottom: "40%",
     paddingLeft: "5%",
-    background: "linear-gradient(0.25turn, #E3AEB1, #546e7a )" 
+    background: "linear-gradient(0.25turn, #E3AEB1, #546e7a )",
+    color: "#455a64"
 
   },
   listItemText: {
       color: theme.palette.secondary.main,
       fontFamily: 'times',
-      fontSize: "1.5rem" 
+      fontSize: "1.2rem" 
 
   }
 }));
@@ -89,7 +90,7 @@ const QuizDrawer = (props) => {
             className={classes.title} variant="h4">
                 Master Output
             </Typography>
-            <span style={{marginLeft: "3%"}}>Single Sounds</span>
+            <span style={{marginLeft: "3%", fontFamily: 'Arizonia, cursive', fontWeight: 300, fontSize: "200%", color: "#455a64"}}>Single Sounds</span>
             <Divider />
             <List>
                 <ListItem button onClick={() => props.drawerParams("random10", true)}>
@@ -102,7 +103,7 @@ const QuizDrawer = (props) => {
                     <ListItemText classes={{primary: classes.listItemText}} primary={"Chords"} />
                 </ListItem>
             </List>
-            <span style={{marginLeft: "3%"}}>Intervals</span>
+            <span style={{marginLeft: "3%", fontFamily: 'Arizonia, cursive', fontWeight: 300, fontSize: "200%", color: "#455a64"}}>Intervals</span>
             <Divider />
             <List>
                 <ListItem button onClick={() => props.drawerParams("scales", false)}>
@@ -111,7 +112,7 @@ const QuizDrawer = (props) => {
                 <ListItem button onClick={() => props.drawerParams("progressions", false)}>
                     <ListItemText classes={{primary: classes.listItemText}} primary={"Progressions"} />
                 </ListItem>
-                <span style={{marginLeft: "3%"}}>Extras</span>
+                <span style={{marginLeft: "3%", fontFamily: 'Arizonia, cursive', fontWeight: 300, fontSize: "200%", color: "#455a64"}}>Extras</span>
                 <Divider />
                 <ListItem button >
                     <a href="/playground"><ListItemText classes={{primary: classes.listItemText}} primary={"Playground"} /></a>

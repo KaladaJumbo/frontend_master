@@ -30,6 +30,7 @@ const App = props => {
   const classes = useStyles();
   const [user, setUser] = useState(null)
   const [loggedIn, setLoggedIn] = useState(null)
+  const [loaded, setLoaded] = useState(false)
 
   const bURL = "http://localhost:3000/"
 
@@ -49,6 +50,7 @@ const App = props => {
           console.log("login");
           console.log(data);
           setUser({...data.user, tags: data.tags})
+          setLoaded(true)
         }, 0)
       }
       else {
@@ -60,13 +62,14 @@ const App = props => {
   useEffect(() => {
     if (localStorage.getItem("token")){
       fetchUser()
+      setTimeout(() => {setLoaded(true)}, 1000);
     }
   }, [])
 
   useEffect(() => {
     if (!!user){
       setLoggedIn(true)
-      console.log("loggedIn")
+      setTimeout(() => {setLoaded(true)}, 1000);
     }
   }, [user])
 
@@ -84,10 +87,10 @@ const App = props => {
               <Quiz />
             </Route>
             <Route exact path="/Tests">
-              {loggedIn ? <Test /> : <Redirect to="/login"/> }
+              {loaded ? loggedIn ? <Test /> : <Redirect to="/login"/> : null}
             </Route>
             <Route exact path="/dashboard">
-            {loggedIn ? <Main /> : <Redirect to="/login"/> }
+            {loaded ? loggedIn ? <Main /> : <Redirect to="/login"/> : null}
             </Route>
             <Route exact path="/login">
               <Login />
@@ -109,7 +112,7 @@ const App = props => {
     </div>
   );
 }
-
+//yooooo
 export default App;
 
 

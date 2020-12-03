@@ -116,8 +116,14 @@ export default function Checkout() {
     const [message, setMessage] = useState({})
     const [type, setType] = useState("random10")
     const [singleSound, setSingleSound] = useState({filter: "random10", ss: true})
+    const [checked, setChecked] = useState(false);
+
 
     const bURL = "http://localhost:3000/"
+
+    const handleUser = () => {
+        setChecked((prev) => !prev);
+    }
 
     const nextQuestion = () => {
         if (test.length > 0){
@@ -177,6 +183,8 @@ export default function Checkout() {
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
+        handleUser()
+        setTimeout(() => {handleUser()}, 500)
         console.log(wrongAnswers);
         nextQuestion()
     };
@@ -184,6 +192,7 @@ export default function Checkout() {
     useEffect(() => {
         console.log("fetch");
         fetchRandom10(type)
+        handleUser()
         
     }, [])
 
@@ -253,60 +262,66 @@ export default function Checkout() {
                     Take a load off, chill, and casually train your ear. 
                 </Typography>
                 <main className={classes.layout}>
-                    <Paper className={classes.paper}>
-                        <div>
+                    <Slide direction="left" in={checked} mountOnEnter unmountOnExit timeout={200}>
+                        <Paper className={classes.paper}>
+                            <div>
 
-                            {test.length >= 0 ? 
-                                <Card align="center" className={classes.card} style={{boxShadow: "none"}}>
-                                    <QuizDrawer drawerParams={drawerParams} />
-                                    <CardContent >
-                                        <Typography  
-                                        style={{fontFamily: 'Times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
-                                        className={classes.title} variant="h6"
-                                        >
-                                            What is being played?
-                                        </Typography>
-                                        {currentQuestion ? currentQuestion.qtype !== "i" ? <Question note={note} /> : <IntervalQuestion note={note}/> : null}
-                                        {/* <IntervalQuestion note={note}/> */}
-                                    </CardContent>
-                                        <CardActions  >
-                                            <span style={{marginLeft: "auto"}}></span>
-                                            {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button className={classes.qButton} disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
-                                            <span style={{marginRight: "auto"}}></span>
-                                        </CardActions>
-                                </Card> : null}
-                            <MobileStepper
-                            variant="progress"
-                            steps={10}
-                            position="static"
-                            activeStep={activeStep}
-                            className={classes.stepperSkin}
-                            nextButton={
-                                <Button size="small" onClick={handleNext} disabled={activeStep === 9}>
-                                    Next
-                                    {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-                                </Button>
-                                }
-                                backButton={
-                                    <Button>{10 - test.length}/10</Button>
-                                }
-                            />
-                        </div>
-                    </Paper>
-                    <Typography  
-                    style={{fontFamily: 'Arizonia, cursive', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
-                    className={classes.title} variant="h3"
-                    >
-                        Score: {correct}/{total}
-                    </Typography>
-                    <Button onClick={() => {fetchRandom10(type)}}>
-                    <Typography  
-                    style={{fontFamily: 'times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
-                    className={classes.title}
-                    >
-                        Restart?
-                    </Typography>
-                    </Button>
+                                {test.length >= 0 ? 
+                                    <Card align="center" className={classes.card} style={{boxShadow: "none"}}>
+                                        <QuizDrawer drawerParams={drawerParams} />
+                                        <CardContent >
+                                            <Typography  
+                                            style={{fontFamily: 'Times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                                            className={classes.title} variant="h6"
+                                            >
+                                                What is being played?
+                                            </Typography>
+                                            {currentQuestion ? currentQuestion.qtype !== "i" ? <Question note={note} /> : <IntervalQuestion note={note}/> : null}
+                                            {/* <IntervalQuestion note={note}/> */}
+                                        </CardContent>
+                                            <CardActions  >
+                                                <span style={{marginLeft: "auto"}}></span>
+                                                {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button className={classes.qButton} disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
+                                                <span style={{marginRight: "auto"}}></span>
+                                            </CardActions>
+                                    </Card> : null}
+                                <MobileStepper
+                                variant="progress"
+                                steps={10}
+                                position="static"
+                                activeStep={activeStep}
+                                className={classes.stepperSkin}
+                                nextButton={
+                                    <Button size="small" onClick={handleNext} disabled={activeStep === 9}>
+                                        Next
+                                        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                                    </Button>
+                                    }
+                                    backButton={
+                                        <Button>{10 - test.length}/10</Button>
+                                    }
+                                />
+                            </div>
+                        </Paper>
+                    </Slide>
+                    <Slide direction="left" in={checked} mountOnEnter unmountOnExit timeout={230}>
+                        <Typography  
+                        style={{fontFamily: 'Arizonia, cursive', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                        className={classes.title} variant="h3"
+                        >
+                            Score: {correct}/{total}
+                        </Typography>
+                    </Slide>
+                    <Slide direction="left" in={checked} mountOnEnter unmountOnExit timeout={240}>
+                        <Button onClick={() => {fetchRandom10(type)}}>
+                        <Typography  
+                        style={{fontFamily: 'times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                        className={classes.title}
+                        >
+                            Restart?
+                        </Typography>
+                        </Button>
+                    </Slide>
                 </main>
             </Container>
         </React.Fragment>

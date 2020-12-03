@@ -18,6 +18,7 @@ const PApp = () => {
     const classes = useStyles();
     const [roll, setRoll] = useState([])
     const [x, setX] = useState(44)
+    const [played, setPlayed] = useState(-1)
 
     const sampler = new Tone.Sampler({
         urls: {
@@ -47,6 +48,7 @@ const PApp = () => {
   const playRoll = (notes = ["C4", "d4", ["c4", "e4", "g4"]]) => {
     const now = Tone.now()
     let interval = 0
+    let counter = 0
     console.log(notes)
     notes.forEach(note => {
         if(note.length > 0){
@@ -61,7 +63,7 @@ const PApp = () => {
                 interval += .2
             }) 
         }
-        
+        counter++
     })
   }
 
@@ -101,7 +103,17 @@ const PApp = () => {
                     <Keyboard sound={sound}/>
                 </Grid>
                 <Grid item >
-                    <PianoGrid x={x} y={25} type={"normal"} sound={sound} roll={roll} setRoll={setRoll} addToRoll={addToRoll} removeFromRoll={removeFromRoll}/>
+                    <PianoGrid 
+                    x={x} 
+                    y={25} 
+                    type={"normal"} 
+                    sound={sound} 
+                    roll={roll} 
+                    setRoll={setRoll} 
+                    addToRoll={addToRoll} 
+                    removeFromRoll={removeFromRoll} 
+                    played={played}
+                    />
                 </Grid>
             </Grid>
         </div>

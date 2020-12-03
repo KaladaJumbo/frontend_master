@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 import Logo from "../images/Logo5.png"
+import { Grow, Slide } from '@material-ui/core';
 
 
 const currentWindow = window.innerHeight
@@ -41,13 +42,31 @@ const useStyles = makeStyles((theme) => ({
   
 const Home = () => {
     const classes = useStyles();
+    const [checked, setChecked] = useState(false);
+
+
+    const handleUser = () => {
+        setChecked((prev) => !prev);
+    }
+
+    useEffect(() => {
+        handleUser()
+    }, [])
 
 
     return (
         <div>
             <div className={classes.section}>
                 <br/>
-                <img className={classes.image} src={Logo} alt="master output logo" />;
+                <Grow
+                in={checked}
+                style={{ transformOrigin: '0 0 0' }}
+                {...(checked ? { timeout: 2000 } : {})}
+                >
+                    <div>
+                        <img className={classes.image} src={Logo} alt="master output logo" />;
+                    </div>
+                </Grow>
             </div>
             <div className={classes.filler}></div>
             <div className={classes.section2}>

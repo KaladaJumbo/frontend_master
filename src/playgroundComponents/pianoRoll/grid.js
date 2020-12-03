@@ -7,7 +7,7 @@ const PianoGrid = (props) => {
     let i = 0
     const columns = []
     while (i < props.x){
-      columns.push(<Column y={props.y} x={i} sound={props.sound} addToRoll={props.addToRoll} removeFromRoll={props.removeFromRoll} roll={props.roll} setRoll={props.setRoll} />)
+      columns.push(<Column y={props.y} x={i} sound={props.sound} addToRoll={props.addToRoll} removeFromRoll={props.removeFromRoll} roll={props.roll} setRoll={props.setRoll} played={props.played} />)
       i++
     }
     return columns

@@ -103,9 +103,14 @@ const Tests = (props) => {
     const [wrongAnswers, setWrongAnswers] = useState("")
     const [open, setOpen] = useState(false)
     const [message, setMessage] = useState({})
+    const [checked, setChecked] = useState(false);
 
 
     const bURL = "http://localhost:3000/"
+
+    const handleUser = () => {
+        setChecked((prev) => !prev);
+    }
 
     const sendResults = () => {
         console.log(user);
@@ -195,6 +200,8 @@ const Tests = (props) => {
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
+        handleUser()
+        setTimeout(() => {handleUser()}, 500)
         console.log(wrongAnswers);
         nextQuestion()
     };
@@ -202,14 +209,15 @@ const Tests = (props) => {
     useEffect(() => {
         console.log("fetch");
         fetchRandom10()
+        handleUser()
         
     }, [])
 
     useEffect(() => {
         console.log("next");
         nextQuestion()
-        
     }, [test])
+
 
     return (
         <React.Fragment>
@@ -267,47 +275,48 @@ const Tests = (props) => {
                     Challenge yourself and find out what you hear
                 </Typography>
                 <main className={classes.layout}>
-                    <Paper className={classes.paper}>
-                        <div>
-
-                        {test.length >= 0 ? 
-                            finished === false ?
-                                <Card align="center" className={classes.card} style={{boxShadow: "none"}}>
-                                    <CardContent >
-                                    <Typography  
-                                    style={{fontFamily: 'Times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
-                                    className={classes.title} variant="h6"
-                                    >
-                                        What is being played?
-                                    </Typography>
-                                    {currentQuestion ? currentQuestion.qtype !== "i" ? <Question note={note} /> : <IntervalQuestion note={note}/> : null}
-                                    </CardContent>
-                                        <CardActions >
-                                            <span style={{marginLeft: "auto"}}></span>
-                                            {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button className={classes.qButton} disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
-                                            <span style={{marginRight: "auto"}}></span>
-                                        </CardActions>
-                                </Card> : 
-                                null
-                            : null}
-                            <MobileStepper
-                            variant="progress"
-                            steps={10}
-                            position="static"
-                            activeStep={activeStep}
-                            className={classes.stepperSkin}
-                            nextButton={
-                                <Button size="small" onClick={handleNext} disabled={activeStep === 9}>
-                                    Next
-                                    {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-                                </Button>
-                                }
-                                backButton={
-                                    <Button>{10 - test.length}/10</Button>
-                                }
-                            />
-                        </div>
-                    </Paper>
+                    <Slide direction="down" in={checked} mountOnEnter unmountOnExit timeout={200}>
+                        <Paper className={classes.paper}>
+                            <div>
+                            {test.length >= 0 ? 
+                                finished === false ?
+                                    <Card align="center" className={classes.card} style={{boxShadow: "none"}}>
+                                        <CardContent >
+                                        <Typography  
+                                        style={{fontFamily: 'Times', "fontWeight": 500, marginRight: "1%", marginBottom: "1%"}} 
+                                        className={classes.title} variant="h6"
+                                        >
+                                            What is being played?
+                                        </Typography>
+                                        {currentQuestion ? currentQuestion.qtype !== "i" ? <Question note={note} /> : <IntervalQuestion note={note}/> : null}
+                                        </CardContent>
+                                            <CardActions >
+                                                <span style={{marginLeft: "auto"}}></span>
+                                                {!!currentQuestion ? currentQuestion.multipleChoice.map(res => <Button className={classes.qButton} disabled={disabled} onClick={() => {submitHandler(res)}}>{res}</Button>): null}
+                                                <span style={{marginRight: "auto"}}></span>
+                                            </CardActions>
+                                    </Card> : 
+                                    null
+                                : null}
+                                <MobileStepper
+                                variant="progress"
+                                steps={10}
+                                position="static"
+                                activeStep={activeStep}
+                                className={classes.stepperSkin}
+                                nextButton={
+                                    <Button size="small" onClick={handleNext} disabled={activeStep === 9}>
+                                        Next
+                                        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                                    </Button>
+                                    }
+                                    backButton={
+                                        <Button>{10 - test.length}/10</Button>
+                                    }
+                                />
+                            </div>
+                        </Paper>
+                    </Slide>
                 </main>
             </Container>
         </React.Fragment>
